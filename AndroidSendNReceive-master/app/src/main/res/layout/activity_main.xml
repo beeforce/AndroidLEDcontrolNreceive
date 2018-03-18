@@ -1,0 +1,630 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/splashColor"
+    xmlns:seekarc="http://schemas.android.com/apk/res-auto"
+    tools:context="com.example.ggg.myapplication.MainActivity">
+
+
+    <com.triggertrap.seekarc.SeekArc
+        android:id="@+id/seekArc"
+        android:layout_width="300dp"
+        android:layout_height="280dp"
+        android:layout_toLeftOf="@+id/textVoltage"
+        android:padding="25dp"
+        android:layout_marginLeft="20dp"
+        seekarc:max="100"
+        seekarc:rotation="180"
+        seekarc:startAngle="30"
+        seekarc:sweepAngle="170"
+        seekarc:progressWidth="8dp"
+        app:touchInside="false"
+        seekarc:progress="50"
+        app:progressColor="#0ff9dd"
+        tools:ignore="NotSibling" />
+
+    <com.triggertrap.seekarc.SeekArc
+        android:id="@+id/seekArc2"
+        android:layout_width="300dp"
+        android:layout_height="280dp"
+        android:padding="70dp"
+        android:layout_marginLeft="20dp"
+        seekarc:max="100"
+        seekarc:rotation="180"
+        seekarc:startAngle="30"
+        seekarc:sweepAngle="140"
+        seekarc:progressWidth="8dp"
+        seekarc:progress="30"
+        app:progressColor="#49ff0c"
+        app:touchInside="false"
+
+        />
+
+    <RelativeLayout
+        android:id="@+id/dateTimeSection"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true">
+
+        <TextView
+            android:layout_marginRight="8dp"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/tv_time"
+            android:id="@+id/tv_date"
+            android:textColor="@android:color/white"
+            android:text="Thu,Apr 13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
+        <TextView
+            android:layout_marginRight="8dp"
+            android:layout_centerVertical="true"
+            android:textSize="22dp"
+            android:id="@+id/tv_time"
+            android:textColor="@android:color/white"
+            android:text="12.30 PM"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true" />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_above="@+id/controlPanel"
+        android:layout_below="@+id/dateTimeSection"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="5dp"
+            android:id="@+id/infoSection"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center_vertical"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="16dp">
+
+            <ImageView
+                android:id="@+id/imgInfo"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_centerInParent="true"
+                android:src="@drawable/circle_outline_bg_selector"
+                android:scaleType="centerInside"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <android.support.v7.widget.AppCompatImageView
+                app:tint="#bababa"
+                android:layout_centerInParent="true"
+                android:padding="8dp"
+                android:src="@drawable/ic_info_outline_white_48dp"
+                android:scaleType="centerInside"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </RelativeLayout>
+
+
+
+        <RelativeLayout
+            android:id="@+id/textVoltage"
+            android:background="@drawable/circle_white_outline_active"
+            android:layout_toLeftOf="@+id/infoSection"
+            android:layout_centerVertical="true"
+            android:layout_width="250dp"
+            android:layout_height="230dp"
+            android:layout_toStartOf="@+id/infoSection">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:padding="25dp">
+
+                <TextView
+                    android:id="@+id/battery_vol"
+                    android:textColor="#35bc81"
+                    android:text="Battery voltage: 7o.5v A"
+                    android:layout_centerHorizontal="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/battery_temp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:text="Battery temperature: 40c"
+                    android:layout_below="@+id/battery_vol"
+                    android:textColor="#35bc81"
+                    />
+
+                <TextView
+                    android:id="@+id/battery_current"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:text="Battery cueent: 100"
+                    android:layout_below="@+id/battery_temp"
+                    android:textColor="#35bc81"
+                    />
+
+                <TextView
+                    android:id="@+id/battery_balance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:text="Battery off balance: 1.250 V"
+                    android:layout_below="@+id/battery_current"
+                    android:textColor="#35bc81"
+                    />
+                <TextView
+                    android:id="@+id/battery_cycle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:text="Battery Cycle: 100000"
+                    android:layout_below="@+id/battery_balance"
+                    android:textColor="#35bc81"
+                    />
+
+                <TextView
+                    android:id="@+id/battery_serial"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:text="Battery Serial: 1254656"
+                    android:layout_below="@+id/battery_cycle"
+                    android:textColor="#35bc81"
+                    />
+                <TextView
+                    android:id="@+id/VIN_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:text="VIN number 99889787878"
+                    android:layout_below="@+id/battery_serial"
+                    android:textColor="#35bc81"
+                    />
+
+                <TextView
+                    android:id="@+id/Milleage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:text="Mileage: 100000000"
+                    android:layout_below="@+id/VIN_number"
+                    android:textColor="#35bc81"
+                    />
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/kmperhour"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="km/h"
+            android:textSize="27dp"
+            android:textColor="#0ff9dd"
+            android:layout_toLeftOf="@+id/textVoltage"
+            android:layout_below="@+id/ttt"
+            android:layout_marginRight="10dp"
+            />
+
+        <TextView
+            android:id="@+id/ttt"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_alignBaseline="@+id/infoSection"/>
+
+
+        <RelativeLayout
+            android:id="@+id/layout_hornicon"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_toLeftOf="@+id/kmperhour"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="3dp"
+            android:layout_below="@+id/ttt">
+
+            <ImageView
+                android:id="@+id/horn"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_centerInParent="true"
+                android:src="@drawable/circle_outline_bg_selector"
+                android:scaleType="centerInside"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <android.support.v7.widget.AppCompatImageView
+                app:tint="#bababa"
+                android:layout_centerInParent="true"
+                android:padding="5dp"
+                android:src="@drawable/horn_icon"
+                android:scaleType="centerInside"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/layout_memory"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="2dp"
+            android:layout_toLeftOf="@+id/layout_hornicon"
+            android:layout_marginTop="3dp"
+            android:layout_below="@+id/ttt">
+
+            <ImageView
+                android:id="@+id/memory"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_centerInParent="true"
+                android:src="@drawable/circle_outline_bg_selector"
+                android:scaleType="centerInside"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <android.support.v7.widget.AppCompatImageView
+                app:tint="#bababa"
+                android:layout_centerInParent="true"
+                android:padding="4dp"
+                android:src="@drawable/memory_icon"
+                android:scaleType="centerInside"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/layout_key"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="2dp"
+            android:layout_toLeftOf="@+id/layout_memory"
+            android:layout_marginTop="3dp"
+            android:layout_below="@+id/ttt">
+
+            <ImageView
+                android:id="@+id/key"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_centerInParent="true"
+                android:src="@drawable/circle_outline_bg_selector"
+                android:scaleType="centerInside"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <android.support.v7.widget.AppCompatImageView
+                app:tint="#bababa"
+                android:layout_centerInParent="true"
+                android:padding="4dp"
+                android:src="@drawable/key_icon"
+                android:scaleType="centerInside"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/speed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/textVoltage"
+            android:layout_below="@+id/kmperhour"
+            android:layout_marginRight="30dp"
+            android:text="100"
+            android:layout_marginTop="-15dp"
+            android:layout_marginBottom="-15dp"
+            android:textStyle="bold"
+            android:textSize="100dp"
+            android:textColor="#0ff9dd"
+            android:adjustViewBounds="false"
+            android:includeFontPadding="false"
+            />
+
+        <TextView
+            android:id="@+id/range"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/speed"
+            android:layout_toRightOf="@+id/layout_memory"
+            android:text="Range"
+            android:textSize="18dp"
+            android:textColor="#0ff9dd"
+            android:adjustViewBounds="false"
+            android:includeFontPadding="false"
+            android:layout_marginTop="-5dp"
+            android:layout_marginBottom="-5dp"
+            />
+
+        <TextView
+            android:id="@+id/rangemeter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/range"
+            android:layout_toRightOf="@+id/layout_memory"
+            android:text="70 km"
+            android:textSize="30dp"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
+            />
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="5dp"
+            android:layout_toLeftOf="@+id/rangemeter"
+            android:layout_above="@+id/layout_refresh"
+            android:src="@drawable/location_icon"/>
+
+        <RelativeLayout
+            android:id="@+id/layout_refresh"
+            android:layout_weight="1"
+            android:layout_width="170dp"
+            android:layout_height="35dp"
+            android:layout_alignStart="@+id/layout_key"
+            android:layout_below="@id/rangemeter"
+            android:layout_alignLeft="@+id/layout_key">
+
+            <com.rm.rmswitch.RMTristateSwitch
+                android:id="@+id/your_id3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:right_to_left="false"
+                app:forceAspectRatio="false"
+                app:state="right"
+                app:enabled="true"
+                app:switchDesign="large"
+                app:switchBkgLeftColor="@color/darkgray"
+                app:switchBkgMiddleColor="@color/darkgray"
+                app:switchBkgRightColor="@color/darkgray"
+                app:switchToggleLeftColor="@color/darkgray"
+                app:switchToggleLeftImage="@drawable/ic_forward_white_48px"
+                app:switchToggleMiddleColor="@color/darkgray"
+                app:switchToggleMiddleImage="@drawable/ic_send"
+                app:switchToggleRightColor="@color/darkgray"
+                app:switchToggleRightImage="@drawable/refresh_icon"/>
+
+        </RelativeLayout>
+
+
+
+
+
+    </RelativeLayout>
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:scaleType="centerCrop"
+        android:src="@drawable/background" />
+
+    <LinearLayout
+        android:weightSum="9"
+        android:background="@android:color/black"
+        android:orientation="horizontal"
+        android:id="@+id/controlPanel"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="56dp">
+
+
+        <!-- ITEMS 1 -->
+        <RelativeLayout
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="44dp">
+
+            <ImageView
+                android:id="@+id/imgBackward"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_centerInParent="true"
+                android:src="@drawable/circle_bg_selector"
+                android:scaleType="centerInside"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <android.support.v7.widget.AppCompatImageView
+                app:tint="#bababa"
+                android:layout_centerInParent="true"
+                android:padding="8dp"
+                android:src="@drawable/ic_backward_white_48px"
+                android:scaleType="centerInside"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </RelativeLayout>
+
+        <!--ITEM 2-->
+        <RelativeLayout
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/imgMocycle"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_centerInParent="true"
+                android:src="@drawable/circle_outline_bg_selector"
+                android:scaleType="centerInside"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <android.support.v7.widget.AppCompatImageView
+                app:tint="#bababa"
+                android:layout_centerInParent="true"
+                android:padding="16dp"
+                android:src="@drawable/mocycle"
+                android:scaleType="centerInside"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </RelativeLayout>
+
+        <!--ITEM 3-->
+        <RelativeLayout
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/imgPlug"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_centerInParent="true"
+                android:src="@drawable/circle_outline_bg_selector"
+                android:scaleType="centerInside"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <android.support.v7.widget.AppCompatImageView
+                app:tint="#bababa"
+                android:layout_centerInParent="true"
+                android:padding="16dp"
+                android:src="@drawable/plug"
+                android:scaleType="centerInside"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </RelativeLayout>
+
+        <!--ITEM 4-->
+        <RelativeLayout
+            android:layout_margin="8dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
+
+            <com.rm.rmswitch.RMTristateSwitch
+                android:id="@+id/your_id2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:right_to_left="false"
+                app:forceAspectRatio="false"
+                app:state="middle"
+                app:enabled="true"
+                app:switchDesign="large"
+                app:switchBkgLeftColor="@color/darkgray"
+                app:switchBkgMiddleColor="@color/darkgray"
+                app:switchBkgRightColor="@color/darkgray"
+                app:switchToggleLeftColor="@color/darkgray"
+                app:switchToggleLeftImage="@drawable/ic_forward_white_48px"
+                app:switchToggleMiddleColor="@color/darkgray"
+                app:switchToggleMiddleImage="@drawable/ic_send"
+                app:switchToggleRightColor="@color/darkgray"
+                app:switchToggleRightImage="@drawable/ic_forward_white_48px"/>
+
+        </RelativeLayout>
+
+        <!--ITEM 5-->
+        <RelativeLayout
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/imgWarning"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_centerInParent="true"
+                android:src="@drawable/circle_outline_bg_selector"
+                android:scaleType="centerInside"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <android.support.v7.widget.AppCompatImageView
+                app:tint="#bababa"
+                android:layout_centerInParent="true"
+                android:padding="12dp"
+                android:src="@drawable/ic_warning_white_48dp"
+                android:scaleType="centerInside"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </RelativeLayout>
+
+        <!--ITEM 6-->
+        <RelativeLayout
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/imgLight"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_centerInParent="true"
+                android:src="@drawable/circle_outline_bg_selector"
+                android:scaleType="centerInside"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <android.support.v7.widget.AppCompatImageView
+                app:tint="#bababa"
+                android:layout_centerInParent="true"
+                android:padding="16dp"
+                android:src="@drawable/light"
+                android:scaleType="centerInside"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </RelativeLayout>
+
+        <!--ITEMS 7 -->
+        <RelativeLayout
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="44dp">
+
+            <ImageView
+                android:id="@+id/imgForward"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_centerInParent="true"
+                android:src="@drawable/circle_bg_selector"
+                android:scaleType="centerInside"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <android.support.v7.widget.AppCompatImageView
+                app:tint="#bababa"
+                android:layout_centerInParent="true"
+                android:padding="8dp"
+                android:src="@drawable/ic_forward_white_48px"
+                android:scaleType="centerInside"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </RelativeLayout>
+
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>
