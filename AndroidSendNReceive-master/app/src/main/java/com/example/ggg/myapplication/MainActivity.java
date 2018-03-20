@@ -10,6 +10,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
@@ -21,11 +22,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.rm.rmswitch.RMSwitch;
 import com.triggertrap.seekarc.SeekArc;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Locale;
 import java.util.UUID;
 import java.util.regex.Pattern;
 
@@ -47,12 +50,13 @@ public class MainActivity extends Activity implements ControlContract.view,View.
     static final String LOG_TAG = "ScreenOffActivity";
     private TextView tv_date;
     private TextView tv_time;
-    private ImageView imgBackward,  imgPlug, imgWarning,  imgForward, imgInfo, imghorn, imgmemory, imgkey, seatlockbtn, highbeambtn;
+    private ImageView imgBackward,  imgPlug, imgWarning,  imgForward, imgInfo, imghorn, imgRFID, imgkey, seatlockbtn, highbeambtn, lock_icon;
     private ControlContract.presenter presenter;
     private SeekArc seekArc2,seekArc1;
+    private RMSwitch mSwitch, Ignition ;
 
     //for test toast
-    String a,v,c;
+    String a,b,c,d;
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
@@ -60,9 +64,15 @@ public class MainActivity extends Activity implements ControlContract.view,View.
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (BluetoothDevice.ACTION_ACL_CONNECTED.equals(action)) {
+                lock_icon.setVisibility(View.GONE);
+                mSwitch.setEnabled(true);
+                Ignition.setEnabled(true);
                 Toast.makeText(getBaseContext(), "Device is now connected", Toast.LENGTH_SHORT).show();
             } else if (BluetoothDevice.ACTION_ACL_DISCONNECTED.equals(action) && isConnected) {
                 turnScreenOffAndExit();
+                lock_icon.setVisibility(View.VISIBLE);
+                mSwitch.setEnabled(false);
+                Ignition.setEnabled(false);
                 isConnected = false;
             }
         }
@@ -71,6 +81,14 @@ public class MainActivity extends Activity implements ControlContract.view,View.
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //set language
+        String languageToLoad  = "en_US"; // your language
+        Locale locale = new Locale(languageToLoad);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale.ENGLISH; //set locale language to english
+        getBaseContext().getResources().updateConfiguration(config,
+                getBaseContext().getResources().getDisplayMetrics());
         setContentView(R.layout.activity_main);
 
         //Link the buttons and textViews to respective views
@@ -151,8 +169,40 @@ public class MainActivity extends Activity implements ControlContract.view,View.
         imgForward = findViewById(R.id.imgForward);
         imgInfo = findViewById(R.id.imgInfo);
         imghorn = findViewById(R.id.horn);
-        imgmemory = findViewById(R.id.memory);
+        imgRFID = findViewById(R.id.memory);
         imgkey = findViewById(R.id.key);
+        lock_icon = findViewById(R.id.lock_icon);
+        Ignition = findViewById(R.id.your_id2);
+        //set on click Ignition(switch)
+        Ignition.setEnabled(false);
+        Ignition.addSwitchObserver(new RMSwitch.RMSwitchObserver() {
+            @Override
+            public void onCheckStateChange(RMSwitch switchView, boolean isChecked) {
+                if (isChecked){
+                    mConnectedThread.write("h");
+
+                }else {
+                    mConnectedThread.write("g");
+
+                }
+            }
+        });
+        mSwitch = findViewById(R.id.your_id);
+        //set on click switch
+        mSwitch.setEnabled(false);
+        mSwitch.addSwitchObserver(new RMSwitch.RMSwitchObserver() {
+            @Override
+            public void onCheckStateChange(RMSwitch switchView, boolean isChecked) {
+
+                if (isChecked){
+                    mConnectedThread.write("f");
+
+                }else {
+                    mConnectedThread.write("c");
+
+                }
+            }
+        });
 
         presenter = new ControlPresenter(this,this);
         presenter.initTime();
@@ -192,7 +242,9 @@ public class MainActivity extends Activity implements ControlContract.view,View.
 //                            sensorView6.setText("Turning Signal: " + sensors[6]);
 //                            sensorView7.setText("Horn: " + sensors[7]);
                             a = sensors[0];
-                            c = sensors[5];
+                            b = sensors[1];
+                            c = sensors[4];
+                            d = sensors[6];
                             int speedprogree = Integer.parseInt(sensors[8]);
                             speedprogree = (speedprogree*180)/180;
                             if (speedprogree > 100){
@@ -256,6 +308,7 @@ public class MainActivity extends Activity implements ControlContract.view,View.
                         btSocket.connect();
                         isConnected = true;
                         Log.e("onResume", "connect");
+
                     } catch (IOException e) {
                         e.printStackTrace();
 
@@ -364,14 +417,17 @@ public class MainActivity extends Activity implements ControlContract.view,View.
         }
         if (v == imgPlug){
             setActive(!imgPlug.isSelected(),imgPlug);
+            mConnectedThread.write("b");
+            Toast.makeText(getApplicationContext(), a,
+                    Toast.LENGTH_LONG).show();
         }
         if (v == imgWarning){
             setActive(!imgWarning.isSelected(),imgWarning);
         }
         if (v == highbeambtn){
             setActive(!highbeambtn.isSelected(),highbeambtn);
-            mConnectedThread.write("c");
-            Toast.makeText(getApplicationContext(), c,
+            mConnectedThread.write("d");
+            Toast.makeText(getApplicationContext(), d,
                     Toast.LENGTH_LONG).show();
         }
         if (v == imgForward){
@@ -383,8 +439,11 @@ public class MainActivity extends Activity implements ControlContract.view,View.
         if (v == imghorn){
             setActive(!imghorn.isSelected(),imghorn);
         }
-        if (v == imgmemory){
-            setActive(!imgmemory.isSelected(),imgmemory);
+        if (v == imgRFID){
+            setActive(!imgRFID.isSelected(),imgRFID);
+            mConnectedThread.write("c");
+            Toast.makeText(getApplicationContext(), c,
+                    Toast.LENGTH_LONG).show();
         }
         if (v == imgkey){
             setActive(!imgkey.isSelected(),imgkey);
@@ -414,7 +473,7 @@ public class MainActivity extends Activity implements ControlContract.view,View.
         imgForward.setOnClickListener(this);
         imgInfo.setOnClickListener(this);
         imghorn.setOnClickListener(this);
-        imgmemory.setOnClickListener(this);
+        imgRFID.setOnClickListener(this);
         imgkey.setOnClickListener(this);
     }
 

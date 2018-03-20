@@ -384,24 +384,22 @@
             android:layout_below="@id/rangemeter"
             android:layout_alignLeft="@+id/layout_key">
 
-            <com.rm.rmswitch.RMTristateSwitch
-                android:id="@+id/your_id3"
+
+
+            <com.rm.rmswitch.RMSwitch
+                android:id="@+id/your_id2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:right_to_left="false"
+                app:checked="true"
                 app:forceAspectRatio="false"
-                app:state="right"
                 app:enabled="true"
-                app:switchDesign="large"
-                app:switchBkgLeftColor="@color/darkgray"
-                app:switchBkgMiddleColor="@color/darkgray"
-                app:switchBkgRightColor="@color/darkgray"
-                app:switchToggleLeftColor="@color/darkgray"
-                app:switchToggleLeftImage="@drawable/ic_forward_white_48px"
-                app:switchToggleMiddleColor="@color/darkgray"
-                app:switchToggleMiddleImage="@drawable/ic_send"
-                app:switchToggleRightColor="@color/darkgray"
-                app:switchToggleRightImage="@drawable/refresh_icon"/>
+                app:switchDesign="android"
+                app:switchBkgCheckedColor="@color/darkgray"
+                app:switchBkgNotCheckedColor="@color/darkgray"
+                app:switchToggleCheckedColor="@color/darkgray"
+                app:switchToggleCheckedImage="@drawable/ic_forward_white_48px"
+                app:switchToggleNotCheckedColor="@color/darkgray"
+                app:switchToggleNotCheckedImage="@drawable/ic_backward_white_48px"/>
 
         </RelativeLayout>
 
@@ -520,24 +518,48 @@
             android:layout_width="0dp"
             android:layout_height="match_parent">
 
-            <com.rm.rmswitch.RMTristateSwitch
-                android:id="@+id/your_id2"
+            <!--<com.rm.rmswitch.RMTristateSwitch-->
+                <!--android:id="@+id/your_id2"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--app:right_to_left="false"-->
+                <!--app:forceAspectRatio="false"-->
+                <!--app:state="middle"-->
+                <!--app:enabled="true"-->
+                <!--app:switchDesign="large"-->
+                <!--app:switchBkgLeftColor="@color/darkgray"-->
+                <!--app:switchBkgMiddleColor="@color/darkgray"-->
+                <!--app:switchBkgRightColor="@color/darkgray"-->
+                <!--app:switchToggleLeftColor="@color/darkgray"-->
+                <!--app:switchToggleLeftImage="@drawable/ic_forward_white_48px"-->
+                <!--app:switchToggleMiddleColor="@color/darkgray"-->
+                <!--app:switchToggleMiddleImage="@drawable/lock_icon_red"-->
+                <!--app:switchToggleRightColor="@color/darkgray"-->
+                <!--app:switchToggleRightImage="@drawable/ic_forward_white_48px"/>-->
+
+            <com.rm.rmswitch.RMSwitch
+                android:id="@+id/your_id"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:right_to_left="false"
+                app:checked="true"
                 app:forceAspectRatio="false"
-                app:state="middle"
                 app:enabled="true"
-                app:switchDesign="large"
-                app:switchBkgLeftColor="@color/darkgray"
-                app:switchBkgMiddleColor="@color/darkgray"
-                app:switchBkgRightColor="@color/darkgray"
-                app:switchToggleLeftColor="@color/darkgray"
-                app:switchToggleLeftImage="@drawable/ic_forward_white_48px"
-                app:switchToggleMiddleColor="@color/darkgray"
-                app:switchToggleMiddleImage="@drawable/ic_send"
-                app:switchToggleRightColor="@color/darkgray"
-                app:switchToggleRightImage="@drawable/ic_forward_white_48px"/>
+                app:switchDesign="android"
+                app:switchBkgCheckedColor="@color/darkgray"
+                app:switchBkgNotCheckedColor="@color/darkgray"
+                app:switchToggleCheckedColor="#9cf553"
+                app:switchToggleCheckedImage="@drawable/ic_forward_white_48px"
+                app:switchToggleNotCheckedColor="@color/darkgray"
+                app:switchToggleNotCheckedImage="@drawable/ic_forward_white_48px"/>
+
+
+
+            <ImageView
+                android:id="@+id/lock_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/lock_icon_red"/>
 
         </RelativeLayout>
 
