@@ -28,7 +28,7 @@ dependencies {
     implementation 'com.github.GrenderG:Toasty:1.2.8'
     implementation 'joda-time:joda-time:2.9.9'
     implementation 'com.rm:rmswitch:1.2.2'
-    compile 'com.github.Triggertrap:SeekArc:v1.1'
+//    compile 'com.github.Triggertrap:SeekArc:v1.1'
 
 
 }

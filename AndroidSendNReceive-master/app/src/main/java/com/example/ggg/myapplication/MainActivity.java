@@ -11,19 +11,24 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.rm.rmswitch.RMSwitch;
-import com.triggertrap.seekarc.SeekArc;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -52,8 +57,9 @@ public class MainActivity extends Activity implements ControlContract.view,View.
     private TextView tv_time;
     private ImageView imgBackward,  imgPlug, imgWarning,  imgForward, imgInfo, imghorn, imgRFID, imgkey, seatlockbtn, highbeambtn, lock_icon;
     private ControlContract.presenter presenter;
-    private SeekArc seekArc2,seekArc1;
-    private RMSwitch mSwitch, Ignition ;
+//    private SeekArc seekArc2,seekArc1;
+    private RMSwitch Ignition ;
+    private SeekBar sb;
 
     //for test toast
     String a,b,c,d;
@@ -65,13 +71,11 @@ public class MainActivity extends Activity implements ControlContract.view,View.
             String action = intent.getAction();
             if (BluetoothDevice.ACTION_ACL_CONNECTED.equals(action)) {
                 lock_icon.setVisibility(View.GONE);
-                mSwitch.setEnabled(true);
                 Ignition.setEnabled(true);
                 Toast.makeText(getBaseContext(), "Device is now connected", Toast.LENGTH_SHORT).show();
             } else if (BluetoothDevice.ACTION_ACL_DISCONNECTED.equals(action) && isConnected) {
                 turnScreenOffAndExit();
                 lock_icon.setVisibility(View.VISIBLE);
-                mSwitch.setEnabled(false);
                 Ignition.setEnabled(false);
                 isConnected = false;
             }
@@ -141,13 +145,13 @@ public class MainActivity extends Activity implements ControlContract.view,View.
 //        sensorView17 = findViewById(R.id.sensorView17);
 //        sensorView18 = findViewById(R.id.sensorView18);
 
-        seekArc1 = findViewById(R.id.seekArc);
-        seekArc2 = findViewById(R.id.seekArc2);
-        seekArc1.setEnabled(false);
-        seekArc2.setEnabled(false);
-
-        seekArc1.setProgress(0);
-        seekArc2.setProgress(0);
+//        seekArc1 = findViewById(R.id.seekArc);
+//        seekArc2 = findViewById(R.id.seekArc2);
+//        seekArc1.setEnabled(false);
+//        seekArc2.setEnabled(false);
+//
+//        seekArc1.setProgress(0);
+//        seekArc2.setProgress(0);
         speed = findViewById(R.id.speed);
         battery_vol = findViewById(R.id.battery_vol);
         battery_temp = findViewById(R.id.battery_temp);
@@ -187,20 +191,197 @@ public class MainActivity extends Activity implements ControlContract.view,View.
                 }
             }
         });
-        mSwitch = findViewById(R.id.your_id);
-        //set on click switch
-        mSwitch.setEnabled(false);
-        mSwitch.addSwitchObserver(new RMSwitch.RMSwitchObserver() {
+//        mSwitch = findViewById(R.id.your_id);
+//        //set on click switch
+//        mSwitch.setEnabled(false);
+//        mSwitch.addSwitchObserver(new RMSwitch.RMSwitchObserver() {
+//            @Override
+//            public void onCheckStateChange(RMSwitch switchView, boolean isChecked) {
+//
+//                if (isChecked){
+//                    mConnectedThread.write("f");
+//
+//                }else {
+//                    mConnectedThread.write("c");
+//
+//                }
+//            }
+//        });
+
+        sb = findViewById(R.id.myseek);
+        sb.setProgress(50);
+
+        
+
+        ViewTreeObserver vto = sb.getViewTreeObserver();
+        vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            public boolean onPreDraw() {
+                Resources res = getResources();
+                Drawable thumb = res.getDrawable(R.drawable.ic_n);
+                int h = (int) (sb.getMeasuredHeight() * 0.75); // 8 * 1.5 = 12
+                int w = h;
+                Bitmap bmpOrg = ((BitmapDrawable)thumb).getBitmap();
+                Bitmap bmpScaled = Bitmap.createScaledBitmap(bmpOrg, w, h, true);
+                Drawable newThumb = new BitmapDrawable(res, bmpScaled);
+                newThumb.setBounds(0, 0, newThumb.getIntrinsicWidth(), newThumb.getIntrinsicHeight());
+                sb.setThumb(newThumb);
+
+                sb.getViewTreeObserver().removeOnPreDrawListener(this);
+
+                return true;
+            }
+        });
+
+        sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
             @Override
-            public void onCheckStateChange(RMSwitch switchView, boolean isChecked) {
+            public void onStopTrackingTouch(SeekBar seekBar) {
 
-                if (isChecked){
-                    mConnectedThread.write("f");
+                if (seekBar.getProgress() > 0 & seekBar.getProgress() < 20) {
+                    ViewTreeObserver vto = sb.getViewTreeObserver();
+                    vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                        public boolean onPreDraw() {
+                            Resources res = getResources();
+                            Drawable thumb = res.getDrawable(R.drawable.ic_r);
+                            int h = (int) (sb.getMeasuredHeight() * 0.75); // 8 * 1.5 = 12
+                            int w = h;
+                            Bitmap bmpOrg = ((BitmapDrawable)thumb).getBitmap();
+                            Bitmap bmpScaled = Bitmap.createScaledBitmap(bmpOrg, w, h, true);
+                            Drawable newThumb = new BitmapDrawable(res, bmpScaled);
+                            newThumb.setBounds(0, 0, newThumb.getIntrinsicWidth(), newThumb.getIntrinsicHeight());
+                            sb.setThumb(newThumb);
 
-                }else {
-                    mConnectedThread.write("c");
+                            sb.getViewTreeObserver().removeOnPreDrawListener(this);
+
+                            return true;
+                        }
+                    });
+                    sb.setProgress(0);
 
                 }
+                if (seekBar.getProgress() > 40 & seekBar.getProgress() < 60) {
+                    ViewTreeObserver vto = sb.getViewTreeObserver();
+                    vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                        public boolean onPreDraw() {
+                            Resources res = getResources();
+                            Drawable thumb = res.getDrawable(R.drawable.ic_n);
+                            int h = (int) (sb.getMeasuredHeight() * 0.75); // 8 * 1.5 = 12
+                            int w = h;
+                            Bitmap bmpOrg = ((BitmapDrawable)thumb).getBitmap();
+                            Bitmap bmpScaled = Bitmap.createScaledBitmap(bmpOrg, w, h, true);
+                            Drawable newThumb = new BitmapDrawable(res, bmpScaled);
+                            newThumb.setBounds(0, 0, newThumb.getIntrinsicWidth(), newThumb.getIntrinsicHeight());
+                            sb.setThumb(newThumb);
+
+                            sb.getViewTreeObserver().removeOnPreDrawListener(this);
+
+                            return true;
+                        }
+                    });
+                    sb.setProgress(50);
+
+                }if (seekBar.getProgress() > 80 & seekBar.getProgress() <= 100) {
+                    ViewTreeObserver vto = sb.getViewTreeObserver();
+                    vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                        public boolean onPreDraw() {
+                            Resources res = getResources();
+                            Drawable thumb = res.getDrawable(R.drawable.ic_d);
+                            int h = (int) (sb.getMeasuredHeight() * 0.75); // 8 * 1.5 = 12
+                            int w = h;
+                            Bitmap bmpOrg = ((BitmapDrawable)thumb).getBitmap();
+                            Bitmap bmpScaled = Bitmap.createScaledBitmap(bmpOrg, w, h, true);
+                            Drawable newThumb = new BitmapDrawable(res, bmpScaled);
+                            newThumb.setBounds(0, 0, newThumb.getIntrinsicWidth(), newThumb.getIntrinsicHeight());
+                            sb.setThumb(newThumb);
+
+                            sb.getViewTreeObserver().removeOnPreDrawListener(this);
+
+                            return true;
+                        }
+                    });
+                    sb.setProgress(100);
+
+                }
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+
+            }
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress,
+                                          boolean fromUser) {
+                if (seekBar.getProgress() > 0 & seekBar.getProgress() < 20) {
+                    ViewTreeObserver vto = sb.getViewTreeObserver();
+                    vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                        public boolean onPreDraw() {
+                            Resources res = getResources();
+                            Drawable thumb = res.getDrawable(R.drawable.ic_r);
+                            int h = (int) (sb.getMeasuredHeight() * 0.75); // 8 * 1.5 = 12
+                            int w = h;
+                            Bitmap bmpOrg = ((BitmapDrawable)thumb).getBitmap();
+                            Bitmap bmpScaled = Bitmap.createScaledBitmap(bmpOrg, w, h, true);
+                            Drawable newThumb = new BitmapDrawable(res, bmpScaled);
+                            newThumb.setBounds(0, 0, newThumb.getIntrinsicWidth(), newThumb.getIntrinsicHeight());
+                            sb.setThumb(newThumb);
+
+                            sb.getViewTreeObserver().removeOnPreDrawListener(this);
+
+                            return true;
+                        }
+                    });
+                    sb.setProgress(0);
+                    mConnectedThread.write("R");
+
+                }
+                if (seekBar.getProgress() > 40 & seekBar.getProgress() < 60) {
+                    ViewTreeObserver vto = sb.getViewTreeObserver();
+                    vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                        public boolean onPreDraw() {
+                            Resources res = getResources();
+                            Drawable thumb = res.getDrawable(R.drawable.ic_n);
+                            int h = (int) (sb.getMeasuredHeight() * 0.75); // 8 * 1.5 = 12
+                            int w = h;
+                            Bitmap bmpOrg = ((BitmapDrawable)thumb).getBitmap();
+                            Bitmap bmpScaled = Bitmap.createScaledBitmap(bmpOrg, w, h, true);
+                            Drawable newThumb = new BitmapDrawable(res, bmpScaled);
+                            newThumb.setBounds(0, 0, newThumb.getIntrinsicWidth(), newThumb.getIntrinsicHeight());
+                            sb.setThumb(newThumb);
+
+                            sb.getViewTreeObserver().removeOnPreDrawListener(this);
+
+                            return true;
+                        }
+                    });
+                    sb.setProgress(50);
+                    mConnectedThread.write("N");
+
+                }if (seekBar.getProgress() > 80 & seekBar.getProgress() <= 100) {
+                    ViewTreeObserver vto = sb.getViewTreeObserver();
+                    vto.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                        public boolean onPreDraw() {
+                            Resources res = getResources();
+                            Drawable thumb = res.getDrawable(R.drawable.ic_d);
+                            int h = (int) (sb.getMeasuredHeight() * 0.75); // 8 * 1.5 = 12
+                            int w = h;
+                            Bitmap bmpOrg = ((BitmapDrawable)thumb).getBitmap();
+                            Bitmap bmpScaled = Bitmap.createScaledBitmap(bmpOrg, w, h, true);
+                            Drawable newThumb = new BitmapDrawable(res, bmpScaled);
+                            newThumb.setBounds(0, 0, newThumb.getIntrinsicWidth(), newThumb.getIntrinsicHeight());
+                            sb.setThumb(newThumb);
+
+                            sb.getViewTreeObserver().removeOnPreDrawListener(this);
+
+                            return true;
+                        }
+                    });
+                    sb.setProgress(100);
+                    mConnectedThread.write("D");
+                }
+
             }
         });
 
@@ -237,40 +418,59 @@ public class MainActivity extends Activity implements ControlContract.view,View.
 //                            sensorView1.setText("Battery Lock: " + sensors[1]);
 //                            sensorView2.setText("BMS Status: " + sensors[2]);
 //                            sensorView3.setText("RTDS: " + sensors[3]);
-//                            sensorView4.setText("RFID: " + sensors[4]);
-//                            sensorView5.setText("High Beam: " + sensors[5]);
-//                            sensorView6.setText("Turning Signal: " + sensors[6]);
-//                            sensorView7.setText("Horn: " + sensors[7]);
-                            a = sensors[0];
-                            b = sensors[1];
-                            c = sensors[4];
-                            d = sensors[6];
-                            int speedprogree = Integer.parseInt(sensors[8]);
-                            speedprogree = (speedprogree*180)/180;
-                            if (speedprogree > 100){
-                                seekArc1.setProgress(100);
+//                            sensorView4.setText("RFID: " + sensors[5]);
+//                            sensorView5.setText("High Beam: " + sensors[7]);
+//                            sensorView6.setText("Turning Signal: " + sensors[8]);
+//                            sensorView7.setText("Horn: " + sensors[9]);
+//                            int speedprogree = Integer.parseInt(sensors[15]);
+//                            speedprogree = (speedprogree*100)/180;
+//                            if (speedprogree > 100){
+//                                seekArc1.setProgress(100);
+//                            }
+//                            else {
+//                                seekArc1.setProgress(speedprogree);
+//                            }
+//                            int battery = Integer.parseInt(sensors[19]);
+//                            if (battery > 100){
+//                                seekArc2.setProgress(100);
+//                            }
+//                            else {
+//                                seekArc2.setProgress(battery);
+//                            }
+                            speed.setText(sensors[15]);
+                            battery_vol.setText("Battery Voltage: " + sensors[18]);
+//                            sensorView10.setText("Battery Percentage: " + sensors[19]);
+                            battery_current.setText("Battery Current: " + sensors[20]);
+                            battery_balance.setText("Battery Off Bal: " + sensors[21]);
+                            battery_temp.setText("Battery Temperature: " + sensors[22]);
+                            rangemeter.setText(sensors[23]);
+                            battery_serial.setText("Battery Serial: " + sensors[25]);
+                            battery_cycle.setText("Battery Cycle: " + sensors[26]);
+                            VIN_number.setText("VIN Number: " + sensors[27]);
+                            Milleage.setText("Vehicle Mileage: " + sensors[28]);
+
+
+                            if (sensors[0].equals("1.00") || sensors[0].equals("1")) {
+                                if (!seatlockbtn.isSelected()){
+                                    seatlockbtn.setSelected(true);
+                                }
                             }
-                            else {
-                                seekArc1.setProgress(speedprogree);
+                            if (sensors[1].equals("1.00") || sensors[1].equals("1")) {
+                                if (!imgPlug.isSelected()){
+                                    imgPlug.setSelected(true);
+                                }
                             }
-                            int battery = Integer.parseInt(sensors[10]);
-                            if (battery > 100){
-                                seekArc2.setProgress(100);
+                            if (sensors[5].equals("1.00") || sensors[5].equals("1")) {
+                                if (!imgRFID.isSelected()){
+                                    imgRFID.setSelected(true);
+                                }
                             }
-                            else {
-                                seekArc2.setProgress(battery);
+                            if (sensors[7].equals("1.00") || sensors[7].equals("1")) {
+                                if (!highbeambtn.isSelected()){
+                                    highbeambtn.setSelected(true);
+                                }
                             }
-                            speed.setText(sensors[8]);
-                            battery_vol.setText("Battery Voltage: " + sensors[9]);
-//                            sensorView10.setText("Battery Percentage: " + sensors[10]);
-                            battery_current.setText("Battery Current: " + sensors[11]);
-                            battery_balance.setText("Battery Off Bal: " + sensors[12]);
-                            battery_temp.setText("Battery Temperature: " + sensors[13]);
-                            rangemeter.setText(sensors[14]);
-                            battery_serial.setText("Battery Serial: " + sensors[15]);
-                            battery_cycle.setText("Battery Cycle: " + sensors[16]);
-                            VIN_number.setText("VIN Number: " + sensors[17]);
-                            Milleage.setText("Vehicle Mileage: " + sensors[18]);
+
                         }
                         recDataString.delete(0, recDataString.length());                    //clear all string data
                     }
@@ -337,53 +537,59 @@ public class MainActivity extends Activity implements ControlContract.view,View.
         super.onStop();
         Log.e("onStop", "onStop " + address);
         Log.e("onStop", " BT " + btSocket.isConnected());
+        try {
+            btSocket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
     @Override
     public void onPause() {
         super.onPause();
+        finish();
 
-        Log.e("onPause", "onPause");
-        try {
-            btSocket.close();
-            isConnected = false;
-            Log.e("onPause", "close socket");
-            BluetoothDevice device = btAdapter.getRemoteDevice(address);
-            try {
-                btSocket = createBluetoothSocket(device);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    while (true) {
-
-                        try {
-                            Thread.sleep(3000);
-
-                            try {
-                                btSocket.connect();
-
-                                    getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
-                                            WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
-                                            WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
-                                            WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
-                                    break;
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                }
-            });
-        } catch (IOException e2) {
-            e2.printStackTrace();
-        }
+//        Log.e("onPause", "onPause");
+//        try {
+//            btSocket.close();
+//            isConnected = false;
+//            Log.e("onPause", "close socket");
+//            BluetoothDevice device = btAdapter.getRemoteDevice(address);
+//            try {
+//                btSocket = createBluetoothSocket(device);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    while (true) {
+//
+//                        try {
+//                            Thread.sleep(3000);
+//
+//                            try {
+//                                btSocket.connect();
+//
+//                                    getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON |
+//                                            WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD |
+//                                            WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED |
+//                                            WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+//                                    break;
+//                            } catch (IOException e) {
+//                                e.printStackTrace();
+//                            }
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//
+//                }
+//            });
+//        } catch (IOException e2) {
+//            e2.printStackTrace();
+//        }
 
 
     }
@@ -412,14 +618,11 @@ public class MainActivity extends Activity implements ControlContract.view,View.
         if (v == seatlockbtn){
             setActive(!seatlockbtn.isSelected(),seatlockbtn);
             mConnectedThread.write("a");
-            Toast.makeText(getApplicationContext(), a,
-                    Toast.LENGTH_LONG).show();
         }
         if (v == imgPlug){
             setActive(!imgPlug.isSelected(),imgPlug);
             mConnectedThread.write("b");
-            Toast.makeText(getApplicationContext(), a,
-                    Toast.LENGTH_LONG).show();
+
         }
         if (v == imgWarning){
             setActive(!imgWarning.isSelected(),imgWarning);
@@ -427,8 +630,7 @@ public class MainActivity extends Activity implements ControlContract.view,View.
         if (v == highbeambtn){
             setActive(!highbeambtn.isSelected(),highbeambtn);
             mConnectedThread.write("d");
-            Toast.makeText(getApplicationContext(), d,
-                    Toast.LENGTH_LONG).show();
+
         }
         if (v == imgForward){
             setActive(!imgForward.isSelected(),imgForward);
@@ -442,8 +644,6 @@ public class MainActivity extends Activity implements ControlContract.view,View.
         if (v == imgRFID){
             setActive(!imgRFID.isSelected(),imgRFID);
             mConnectedThread.write("c");
-            Toast.makeText(getApplicationContext(), c,
-                    Toast.LENGTH_LONG).show();
         }
         if (v == imgkey){
             setActive(!imgkey.isSelected(),imgkey);

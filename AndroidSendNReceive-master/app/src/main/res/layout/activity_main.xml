@@ -9,39 +9,39 @@
     tools:context="com.example.ggg.myapplication.MainActivity">
 
 
-    <com.triggertrap.seekarc.SeekArc
-        android:id="@+id/seekArc"
-        android:layout_width="300dp"
-        android:layout_height="280dp"
-        android:layout_toLeftOf="@+id/textVoltage"
-        android:padding="25dp"
-        android:layout_marginLeft="20dp"
-        seekarc:max="100"
-        seekarc:rotation="180"
-        seekarc:startAngle="30"
-        seekarc:sweepAngle="170"
-        seekarc:progressWidth="8dp"
-        app:touchInside="false"
-        seekarc:progress="50"
-        app:progressColor="#0ff9dd"
-        tools:ignore="NotSibling" />
+    <!--<com.triggertrap.seekarc.SeekArc-->
+        <!--android:id="@+id/seekArc"-->
+        <!--android:layout_width="300dp"-->
+        <!--android:layout_height="280dp"-->
+        <!--android:layout_toLeftOf="@+id/textVoltage"-->
+        <!--android:padding="25dp"-->
+        <!--android:layout_marginLeft="20dp"-->
+        <!--seekarc:max="100"-->
+        <!--seekarc:rotation="180"-->
+        <!--seekarc:startAngle="30"-->
+        <!--seekarc:sweepAngle="170"-->
+        <!--seekarc:progressWidth="8dp"-->
+        <!--app:touchInside="false"-->
+        <!--seekarc:progress="50"-->
+        <!--app:progressColor="#0ff9dd"-->
+        <!--tools:ignore="NotSibling" />-->
 
-    <com.triggertrap.seekarc.SeekArc
-        android:id="@+id/seekArc2"
-        android:layout_width="300dp"
-        android:layout_height="280dp"
-        android:padding="70dp"
-        android:layout_marginLeft="20dp"
-        seekarc:max="100"
-        seekarc:rotation="180"
-        seekarc:startAngle="30"
-        seekarc:sweepAngle="140"
-        seekarc:progressWidth="8dp"
-        seekarc:progress="30"
-        app:progressColor="#49ff0c"
-        app:touchInside="false"
+    <!--<com.triggertrap.seekarc.SeekArc-->
+        <!--android:id="@+id/seekArc2"-->
+        <!--android:layout_width="300dp"-->
+        <!--android:layout_height="280dp"-->
+        <!--android:padding="70dp"-->
+        <!--android:layout_marginLeft="20dp"-->
+        <!--seekarc:max="100"-->
+        <!--seekarc:rotation="180"-->
+        <!--seekarc:startAngle="30"-->
+        <!--seekarc:sweepAngle="140"-->
+        <!--seekarc:progressWidth="8dp"-->
+        <!--seekarc:progress="30"-->
+        <!--app:progressColor="#49ff0c"-->
+        <!--app:touchInside="false"-->
 
-        />
+        <!--/>-->
 
     <RelativeLayout
         android:id="@+id/dateTimeSection"
@@ -334,7 +334,7 @@
             android:layout_marginTop="-15dp"
             android:layout_marginBottom="-15dp"
             android:textStyle="bold"
-            android:textSize="100dp"
+            android:textSize="60dp"
             android:textColor="#0ff9dd"
             android:adjustViewBounds="false"
             android:includeFontPadding="false"
@@ -351,8 +351,7 @@
             android:textColor="#0ff9dd"
             android:adjustViewBounds="false"
             android:includeFontPadding="false"
-            android:layout_marginTop="-5dp"
-            android:layout_marginBottom="-5dp"
+
             />
 
         <TextView
@@ -516,13 +515,14 @@
             android:layout_gravity="center_vertical"
             android:layout_weight="3"
             android:layout_width="0dp"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:background="@color/darkgray">
 
             <!--<com.rm.rmswitch.RMTristateSwitch-->
-                <!--android:id="@+id/your_id2"-->
+                <!--android:id="@+id/your_id"-->
                 <!--android:layout_width="match_parent"-->
                 <!--android:layout_height="match_parent"-->
-                <!--app:right_to_left="false"-->
+                <!--app:right_to_left="true"-->
                 <!--app:forceAspectRatio="false"-->
                 <!--app:state="middle"-->
                 <!--app:enabled="true"-->
@@ -537,20 +537,29 @@
                 <!--app:switchToggleRightColor="@color/darkgray"-->
                 <!--app:switchToggleRightImage="@drawable/ic_forward_white_48px"/>-->
 
-            <com.rm.rmswitch.RMSwitch
-                android:id="@+id/your_id"
+            <SeekBar
+                android:id="@+id/myseek"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:checked="true"
-                app:forceAspectRatio="false"
-                app:enabled="true"
-                app:switchDesign="android"
-                app:switchBkgCheckedColor="@color/darkgray"
-                app:switchBkgNotCheckedColor="@color/darkgray"
-                app:switchToggleCheckedColor="#9cf553"
-                app:switchToggleCheckedImage="@drawable/ic_forward_white_48px"
-                app:switchToggleNotCheckedColor="@color/darkgray"
-                app:switchToggleNotCheckedImage="@drawable/ic_forward_white_48px"/>
+                android:clickable="false"
+                android:max="100"
+                android:layout_marginTop="2dp"
+                android:progressDrawable="@android:color/transparent" />
+
+            <!--<com.rm.rmswitch.RMTristateSwitch-->
+                <!--android:id="@+id/your_id"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent"-->
+                <!--app:checked="true"-->
+                <!--app:forceAspectRatio="false"-->
+                <!--app:enabled="true"-->
+                <!--app:switchDesign="android"-->
+                <!--app:switchBkgCheckedColor="@color/darkgray"-->
+                <!--app:switchBkgNotCheckedColor="@color/darkgray"-->
+                <!--app:switchToggleCheckedColor="#9cf553"-->
+                <!--app:switchToggleCheckedImage="@drawable/ic_forward_white_48px"-->
+                <!--app:switchToggleNotCheckedColor="@color/darkgray"-->
+                <!--app:switchToggleNotCheckedImage="@drawable/ic_forward_white_48px"/>-->
 
 
 

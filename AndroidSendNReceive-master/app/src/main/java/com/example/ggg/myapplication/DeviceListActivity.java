@@ -3,19 +3,10 @@ package com.example.ggg.myapplication;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.PowerManager;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -28,8 +19,8 @@ import java.util.Set;
 public class DeviceListActivity extends Activity {
     // Debugging for LOGCAT
     private static final String TAG = "DeviceListActivity";
-    private static final boolean D = true;
-    private PowerManager.WakeLock mWakeLock;
+    private String address;
+    private boolean connected = false;
 
     // declare button for launching website and textview for connection status
     Button tlbutton;
@@ -56,7 +47,7 @@ public class DeviceListActivity extends Activity {
         super.onResume();
         //***************
 
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+//        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
         checkBTState();
         textView1 = (TextView) findViewById(R.id.connecting);
         textView1.setTextSize(40);
@@ -68,7 +59,6 @@ public class DeviceListActivity extends Activity {
         // Find and set up the ListView for paired devices
         ListView pairedListView = (ListView) findViewById(R.id.paired_devices);
         pairedListView.setAdapter(mPairedDevicesArrayAdapter);
-        pairedListView.setOnItemClickListener(mDeviceClickListener);
 
         // Get the local Bluetooth adapter
         mBtAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -81,6 +71,15 @@ public class DeviceListActivity extends Activity {
             findViewById(R.id.title_paired_devices).setVisibility(View.VISIBLE);//make title viewable
             for (BluetoothDevice device : pairedDevices) {
                 mPairedDevicesArrayAdapter.add(device.getName() + "\n" + device.getAddress());
+                // Get the device MAC address, which is the last 17 chars in the View
+                address = device.getAddress();
+            }
+            if (address != null && connected == false) {
+                // Make an intent to start next activity while taking an extra which is the MAC address.
+                Intent i = new Intent(DeviceListActivity.this, MainActivity.class);
+                i.putExtra(EXTRA_DEVICE_ADDRESS, address);
+                startActivity(i);
+                connected = true;
             }
         } else {
             String noDevices = getResources().getText(R.string.none_paired).toString();
@@ -88,21 +87,36 @@ public class DeviceListActivity extends Activity {
         }
     }
 
-    // Set up on-click listener for the list (nicked this - unsure)
-    private OnItemClickListener mDeviceClickListener = new OnItemClickListener() {
-        public void onItemClick(AdapterView<?> av, View v, int arg2, long arg3) {
+    @Override
+    public void onRestart() {
+        super.onRestart();
+        // Get the local Bluetooth adapter
+        mBtAdapter = BluetoothAdapter.getDefaultAdapter();
 
-            textView1.setText("Connecting...");
-            // Get the device MAC address, which is the last 17 chars in the View
-            String info = ((TextView) v).getText().toString();
-            String address = info.substring(info.length() - 17);
+        // Get a set of currently paired devices and append to 'pairedDevices'
+        Set<BluetoothDevice> pairedDevices = mBtAdapter.getBondedDevices();
 
-            // Make an intent to start next activity while taking an extra which is the MAC address.
-            Intent i = new Intent(DeviceListActivity.this, MainActivity.class);
-            i.putExtra(EXTRA_DEVICE_ADDRESS, address);
-            startActivity(i);
+        // Add previosuly paired devices to the array
+        if (pairedDevices.size() > 0) {
+            findViewById(R.id.title_paired_devices).setVisibility(View.VISIBLE);//make title viewable
+            for (BluetoothDevice device : pairedDevices) {
+                mPairedDevicesArrayAdapter.add(device.getName() + "\n" + device.getAddress());
+                // Get the device MAC address, which is the last 17 chars in the View
+                address = device.getAddress();
+            }
+            if (address != null && connected == false) {
+                // Make an intent to start next activity while taking an extra which is the MAC address.
+                Intent i = new Intent(DeviceListActivity.this, MainActivity.class);
+                i.putExtra(EXTRA_DEVICE_ADDRESS, address);
+                startActivity(i);
+                connected = true;
+            }
+        } else {
+            String noDevices = getResources().getText(R.string.none_paired).toString();
+            mPairedDevicesArrayAdapter.add(noDevices);
         }
-    };
+    }
+
 
     private void checkBTState() {
         // Check device has Bluetooth and that it is turned on
