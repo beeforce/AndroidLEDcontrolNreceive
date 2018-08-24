@@ -14,4 +14,12 @@
     <style name="ControllerTheme" parent="Theme.AppCompat.Light.NoActionBar">
     </style>
 
+    <style name="SeekArc">
+        <item name="arcColor">@color/progress_gray_dark</item>
+    </style>
+
+    <style name="SeekArcLight">
+        <item name="arcColor">@color/progress_gray</item>
+    </style>
+
 </resources>

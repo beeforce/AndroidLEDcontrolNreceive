@@ -74,12 +74,11 @@ public class DeviceListActivity extends Activity {
                 // Get the device MAC address, which is the last 17 chars in the View
                 address = device.getAddress();
             }
-            if (address != null && connected == false) {
+            if (address != null) {
                 // Make an intent to start next activity while taking an extra which is the MAC address.
                 Intent i = new Intent(DeviceListActivity.this, MainActivity.class);
                 i.putExtra(EXTRA_DEVICE_ADDRESS, address);
                 startActivity(i);
-                connected = true;
             }
         } else {
             String noDevices = getResources().getText(R.string.none_paired).toString();
@@ -104,12 +103,11 @@ public class DeviceListActivity extends Activity {
                 // Get the device MAC address, which is the last 17 chars in the View
                 address = device.getAddress();
             }
-            if (address != null && connected == false) {
+            if (address != null) {
                 // Make an intent to start next activity while taking an extra which is the MAC address.
                 Intent i = new Intent(DeviceListActivity.this, MainActivity.class);
                 i.putExtra(EXTRA_DEVICE_ADDRESS, address);
                 startActivity(i);
-                connected = true;
             }
         } else {
             String noDevices = getResources().getText(R.string.none_paired).toString();

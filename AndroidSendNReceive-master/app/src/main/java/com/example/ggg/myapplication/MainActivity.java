@@ -22,12 +22,17 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.anastr.speedviewlib.TubeSpeedometer;
 import com.rm.rmswitch.RMSwitch;
 
 import java.io.IOException;
@@ -57,9 +62,11 @@ public class MainActivity extends Activity implements ControlContract.view,View.
     private TextView tv_time;
     private ImageView imgBackward,  imgPlug, imgWarning,  imgForward, imgInfo, imghorn, imgRFID, imgkey, seatlockbtn, highbeambtn, lock_icon;
     private ControlContract.presenter presenter;
-//    private SeekArc seekArc2,seekArc1;
     private RMSwitch Ignition ;
+    private TubeSpeedometer seekArc1, seekArc2;
     private SeekBar sb;
+    private RelativeLayout showtext;
+    private Animation animation;
 
     //for test toast
     String a,b,c,d;
@@ -95,6 +102,12 @@ public class MainActivity extends Activity implements ControlContract.view,View.
                 getBaseContext().getResources().getDisplayMetrics());
         setContentView(R.layout.activity_main);
 
+        animation = new AlphaAnimation(1, 0);
+        animation.setDuration(500);
+        animation.setInterpolator(new LinearInterpolator());
+        animation.setRepeatCount(Animation.INFINITE);
+        animation.setRepeatMode(Animation.REVERSE);
+
         //Link the buttons and textViews to respective views
         initView();
 
@@ -105,6 +118,7 @@ public class MainActivity extends Activity implements ControlContract.view,View.
         filter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
         filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);
         registerReceiver(mReceiver, filter);
+
 
         // Set up onClick listeners for buttons to send 1 or 0 to turn on/off LED
 
@@ -145,13 +159,13 @@ public class MainActivity extends Activity implements ControlContract.view,View.
 //        sensorView17 = findViewById(R.id.sensorView17);
 //        sensorView18 = findViewById(R.id.sensorView18);
 
-//        seekArc1 = findViewById(R.id.seekArc);
-//        seekArc2 = findViewById(R.id.seekArc2);
+        seekArc1 = findViewById(R.id.speedView);
+        seekArc2 = findViewById(R.id.speedView2);
 //        seekArc1.setEnabled(false);
-//        seekArc2.setEnabled(false);
-//
-//        seekArc1.setProgress(0);
-//        seekArc2.setProgress(0);
+        seekArc2.setEnabled(false);
+
+        seekArc1.speedTo(0);
+        seekArc2.speedTo(0);
         speed = findViewById(R.id.speed);
         battery_vol = findViewById(R.id.battery_vol);
         battery_temp = findViewById(R.id.battery_temp);
@@ -163,6 +177,8 @@ public class MainActivity extends Activity implements ControlContract.view,View.
         Milleage = findViewById(R.id.Milleage);
         rangemeter = findViewById(R.id.rangemeter);
 
+        showtext = (RelativeLayout) findViewById(R.id.textVoltage);
+
         tv_date = findViewById(R.id.tv_date);
         tv_time = findViewById(R.id.tv_time);
         imgBackward = findViewById(R.id.imgBackward);
@@ -172,6 +188,7 @@ public class MainActivity extends Activity implements ControlContract.view,View.
         highbeambtn = findViewById(R.id.imgLight);
         imgForward = findViewById(R.id.imgForward);
         imgInfo = findViewById(R.id.imgInfo);
+        imgInfo.setSelected(true);
         imghorn = findViewById(R.id.horn);
         imgRFID = findViewById(R.id.memory);
         imgkey = findViewById(R.id.key);
@@ -422,21 +439,21 @@ public class MainActivity extends Activity implements ControlContract.view,View.
 //                            sensorView5.setText("High Beam: " + sensors[7]);
 //                            sensorView6.setText("Turning Signal: " + sensors[8]);
 //                            sensorView7.setText("Horn: " + sensors[9]);
-//                            int speedprogree = Integer.parseInt(sensors[15]);
-//                            speedprogree = (speedprogree*100)/180;
-//                            if (speedprogree > 100){
-//                                seekArc1.setProgress(100);
-//                            }
-//                            else {
-//                                seekArc1.setProgress(speedprogree);
-//                            }
-//                            int battery = Integer.parseInt(sensors[19]);
-//                            if (battery > 100){
-//                                seekArc2.setProgress(100);
-//                            }
-//                            else {
-//                                seekArc2.setProgress(battery);
-//                            }
+                            double speedprogree = Double.parseDouble(sensors[15]);
+                            speedprogree = (speedprogree*100)/180;
+                            if (speedprogree > 180){
+                                seekArc1.speedTo(180);
+                            }
+                            else {
+                                seekArc1.speedTo((int)speedprogree);
+                            }
+                            double battery = Double.parseDouble(sensors[19]);
+                            if (battery > 100){
+                                seekArc2.speedTo(100);
+                            }
+                            else {
+                                seekArc2.speedTo((int)battery);
+                            }
                             speed.setText(sensors[15]);
                             battery_vol.setText("Battery Voltage: " + sensors[18]);
 //                            sensorView10.setText("Battery Percentage: " + sensors[19]);
@@ -468,6 +485,18 @@ public class MainActivity extends Activity implements ControlContract.view,View.
                             if (sensors[7].equals("1.00") || sensors[7].equals("1")) {
                                 if (!highbeambtn.isSelected()){
                                     highbeambtn.setSelected(true);
+                                }
+                            }
+
+                            if (sensors[8].equals("1.00") || sensors[8].equals("1")) {
+                                imgForward.startAnimation(animation);
+                                imgBackward.startAnimation(animation);
+                            }else {
+                                Animation anim = imgBackward.getAnimation();
+                                Animation anim2 = imgForward.getAnimation();
+                                if (anim != null && anim.hasStarted() && !anim.hasEnded() && anim2 != null && anim2.hasStarted() && !anim2.hasEnded()) {
+                                    imgForward.clearAnimation();
+                                    imgBackward.clearAnimation();
                                 }
                             }
 
@@ -613,7 +642,13 @@ public class MainActivity extends Activity implements ControlContract.view,View.
     @Override
     public void onClick(View v) {
         if (v == imgBackward){
-            setActive(!imgBackward.isSelected(),imgBackward);
+            mConnectedThread.write("l");
+            Animation anim = imgBackward.getAnimation();
+            if (anim != null && anim.hasStarted() && !anim.hasEnded()) {
+                imgBackward.clearAnimation();
+            }else {
+                imgBackward.startAnimation(animation);
+            }
         }
         if (v == seatlockbtn){
             setActive(!seatlockbtn.isSelected(),seatlockbtn);
@@ -626,6 +661,7 @@ public class MainActivity extends Activity implements ControlContract.view,View.
         }
         if (v == imgWarning){
             setActive(!imgWarning.isSelected(),imgWarning);
+            mConnectedThread.write("e");
         }
         if (v == highbeambtn){
             setActive(!highbeambtn.isSelected(),highbeambtn);
@@ -633,10 +669,23 @@ public class MainActivity extends Activity implements ControlContract.view,View.
 
         }
         if (v == imgForward){
-            setActive(!imgForward.isSelected(),imgForward);
+            mConnectedThread.write("r");
+            Animation anim = imgForward.getAnimation();
+            if (anim != null && anim.hasStarted() && !anim.hasEnded()) {
+                imgForward.clearAnimation();
+            }else {
+                imgForward.startAnimation(animation);
+            }
         }
         if (v == imgInfo){
-            setActive(!imgInfo.isSelected(),imgInfo);
+            if (imgInfo.isSelected()){
+                imgInfo.setSelected(false);
+                showtext.setVisibility(View.INVISIBLE);
+            }else{
+                imgInfo.setSelected(true);
+                showtext.setVisibility(View.VISIBLE);
+            }
+
         }
         if (v == imghorn){
             setActive(!imghorn.isSelected(),imghorn);
